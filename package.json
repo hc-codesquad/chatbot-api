@@ -1,0 +1,38 @@
+{
+  "name": "chatbot-api",
+  "version": "0.0.1",
+  "description": "API to Chatbot of HiringCoders project from team CodeSquad",
+  "main": "src/handler.js",
+  "scripts": {
+    "debug": "node --inspect=0.0.0.0 ./node_modules/serverless/bin/serverless.js offline start --stage dev",
+    "ddb-install": "serverless dynamodb install",
+    "ddb-seed": "serverless dynamodb migrate && serverless dynamodb seed",
+    "package": "serverless package",
+    "deploy": "serverless deploy",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "source-map-support": "^0.5.10",
+    "lodash": "^4.17.20",
+    "shortid": "^2.2.15"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.17",
+    "@types/node": "^10.12.18",
+    "@types/serverless": "^1.72.5",
+    "fork-ts-checker-webpack-plugin": "^3.0.1",
+    "serverless": "^2.0.0",
+    "serverless-dotenv-plugin": "^3.0.0",
+    "serverless-dynamodb-local": "^0.2.39",
+    "serverless-offline": "^6.7.0",
+    "serverless-webpack": "^5.2.0",
+    "ts-loader": "^5.3.3",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.2.4",
+    "webpack": "^4.29.0",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "repository": "https://github.com/hc-codesquad/chatbot-api",
+  "author": "CodeSquad",
+  "license": "MIT"
+}
