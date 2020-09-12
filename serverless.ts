@@ -11,14 +11,14 @@ const serverlessConfiguration: Serverless = {
   custom: {
     webpack: {
       webpackConfig: './webpack.config.js',
-      includeModules: true
-    }
+      includeModules: true,
+    },
   },
   // Add the serverless-webpack plugin
   plugins: [
     'serverless-webpack',
     'serverless-offline',
-    'serverless-dynamodb-local'
+    'serverless-dynamodb-local',
   ],
   provider: {
     name: 'aws',
@@ -31,18 +31,18 @@ const serverlessConfiguration: Serverless = {
     },
   },
   functions: {
-    hello: {
+    chatbot: {
       handler: 'src/handler.chatbot',
       events: [
         {
           http: {
-            method: 'get',
+            method: 'post',
             path: 'chatbot',
-          }
-        }
-      ]
-    }
-  }
-}
+          },
+        },
+      ],
+    },
+  },
+};
 
 module.exports = serverlessConfiguration;
