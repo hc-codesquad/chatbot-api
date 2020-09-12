@@ -5,6 +5,7 @@ import {
   sendDefaultMessage,
 } from './botRequest';
 import { ChatRequest, ChatResponse } from './types/chat';
+import { getSkuProduct } from './skuRequest';
 
 const chatbot: APIGatewayProxyHandler = async (event) => {
   let response: ChatResponse;
@@ -14,13 +15,14 @@ const chatbot: APIGatewayProxyHandler = async (event) => {
 
     const chatRequest: ChatRequest = parseBotRequest(body);
 
-    const { chatId, text } = chatRequest;
+    const { chatId, text, sku } = chatRequest;
 
     console.log('ChatID: ', chatId, 'text: ', text);
 
     if (!text) {
       response = sendDefaultMessage();
     } else {
+      console.log(getSkuProduct(sku))
       response = {
         message: {
           text:
