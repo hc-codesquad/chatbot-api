@@ -46,9 +46,9 @@ export abstract class Intent {
     return false;
   }
 
-  nextAction():
-    | Intent
-    | { intent: Intent; slot?: Slot; response: ChatResponse } {
+  async nextAction(): Promise<
+    Intent | { intent: Intent; slot?: Slot; response: ChatResponse }
+  > {
     if (!this.isFullfilled) {
       const slot = this.slots.find(s => s.filled !== true);
       if (slot) {
@@ -66,7 +66,7 @@ export abstract class Intent {
       this.isFullfilled = true;
     }
 
-    const response = this.finish();
+    const response = await this.finish();
 
     if (response instanceof Intent) {
       return response;
@@ -78,5 +78,5 @@ export abstract class Intent {
     };
   }
 
-  abstract finish(): Intent | ChatResponse;
+  abstract finish(): Promise<Intent | ChatResponse>;
 }

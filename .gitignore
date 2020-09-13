@@ -9,4 +9,7 @@ jspm_packages
 # Webpack directories
 .webpack
 
-.env
+#idea folder
+/.idea
+
+.env 

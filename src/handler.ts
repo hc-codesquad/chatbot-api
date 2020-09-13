@@ -27,7 +27,7 @@ const chatbot: APIGatewayProxyHandler = async (event) => {
     if (!text) {
       response = sendDefaultMessage();
     } else {
-      const parse = parseUserMessage(text, chat);
+      const parse = await parseUserMessage(text, chat);
 
       console.log('parseUserMessage', parse);
 
