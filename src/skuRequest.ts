@@ -1,6 +1,6 @@
 import { ProductSuggestion, Sku } from './types/product';
 
-async function getSkuId(sku): Sku {
+async function getSkuId(sku): Promise<Sku> {
   const url = `https://hiringcoders13.myvtex.com/api/catalog_system/pvt/sku/stockkeepingunitbyid/${sku}`;
 
   const response = await fetch(url, {
@@ -10,10 +10,10 @@ async function getSkuId(sku): Sku {
     }
   })
   const skuItem = await response.json()
-  return { id: skuItem.id, name: skuItem.nameComplete, url: skuItem.DetailUrl, imageUrl: skuItem.ImageUrl };
+  return { id: skuItem.Id, name: skuItem.SkuName, url: skuItem.DetailUrl, imageUrl: skuItem.ImageUrl };
 }
 
-async function listAllSkus(): Promise<[]> {
+async function listAllSkus(): Promise<unknow> {
   const url = `https://hiringcoders13.vtexcommercestable.com.br/api/catalog_system/pvt/sku/stockkeepingunitids?page=1&pagesize=50`
   const listSkus = await fetch(url, {
     headers: {
@@ -28,21 +28,23 @@ async function listAllSkus(): Promise<[]> {
 
 export async function getSkuProduct(sku): Promise<ProductSuggestion> {
 
-  const skuRecebido: Sku = getSkuId(sku);
-  let skusSimilares = []
-  console.log(await listAllSkus());
-  const arraySkusSimilares = await listAllSkus().map(id => {
-    if (id != skuRecebido.id) {
-      skusSimilares.push(await getSkuId(id))
-    }); 
+  const skuRecebido: Sku = await getSkuId(sku);
+  const skus = <number[]>await listAllSkus();
+
+  const similarProducts = await Promise.all(skus.map(async (id) => {
+    const sku = await getSkuId(id)
+    if (id !== skuRecebido.id && sku.name === skuRecebido.name) {
+      return sku;
+    }
+  }))
 
   const products = {
-    number: 1,
-    skus: skusSimilares
+    id: 1,
+    skus: similarProducts.filter(sku => sku)
   }
 
   return {
-    skuId: products.number,
+    skuId: products.id,
     suggestions: products.skus,
     createdAt: new Date(),
     ttl: 3000

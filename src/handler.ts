@@ -27,7 +27,7 @@ const chatbot: APIGatewayProxyHandler = async (event) => {
           text:
             'Ok, vou procurar aqui as melhores sugestões para você, só um minuto',
         },
-        suggestions:await getSkuProduct(sku)
+        suggestions: await getSkuProduct(sku)
       };
     }
   } catch (e) {
