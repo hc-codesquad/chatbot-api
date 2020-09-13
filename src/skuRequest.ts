@@ -13,7 +13,7 @@ async function getSkuId(sku): Promise<Sku> {
   return { id: skuItem.Id, name: skuItem.SkuName, url: skuItem.DetailUrl, imageUrl: skuItem.ImageUrl };
 }
 
-async function listAllSkus(): Promise<unknow> {
+async function listAllSkus(): Promise<[]> {
   const url = `https://hiringcoders13.vtexcommercestable.com.br/api/catalog_system/pvt/sku/stockkeepingunitids?page=1&pagesize=50`
   const listSkus = await fetch(url, {
     headers: {
@@ -49,4 +49,8 @@ export async function getSkuProduct(sku): Promise<ProductSuggestion> {
     createdAt: new Date(),
     ttl: 3000
   };
+}
+
+export async function addToProductToCart(sku: string, quantity: string): Promise<string> {
+  return `https://hiringcoders13.vtexcommercebeta.com.br/checkout/cart/add/?sku=${sku}&qty=${quantity}&seller=1&sc=1`;
 }
