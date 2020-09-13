@@ -1,9 +1,11 @@
 import { ProductSuggestion } from './product';
+import { Intent } from './flow';
 
 export interface ChatContext {
   skuId?: number;
   suggestions?: ProductSuggestion;
   wantSuggestions?: boolean;
+  currentIntent?: Intent | undefined;
   [propName: string]: unknown;
 }
 
