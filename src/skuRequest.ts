@@ -1,8 +1,6 @@
 import { ProductSuggestion, Sku } from './types/product';
 
-
-export async function getSkuProduct(sku): Promise<ProductSuggestion> {
-
+async function getSkuId(sku):Sku {
   const url = `https://hiringcoders13.myvtex.com/api/catalog_system/pvt/sku/stockkeepingunitbyid/${sku}`;
 
   const response = await fetch(url, {
@@ -11,10 +9,14 @@ export async function getSkuProduct(sku): Promise<ProductSuggestion> {
       "x-vtex-api-appkey": "vtexappkey-hiringcoders13-FCQFKD"
     }
   })
+  const skuItem = await response.json()
+  return { id: skuItem.id, name: skuItem.nameComplete, url: skuItem.DetailUrl, imageUrl: skuItem.ImageUrl };
+}
 
-  const skuItem = await response.json();
 
-  const sku1: Sku = { id: skuItem.id, name: skuItem.nameComplete, url: skuItem.DetailUrl, imageUrl: skuItem.ImageUrl }
+export async function getSkuProduct(sku): Promise<ProductSuggestion> {
+
+  const sku1: Sku = getSkuId(sku) 
 
   const products = {
     number: 1,
