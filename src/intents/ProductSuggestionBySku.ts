@@ -1,4 +1,4 @@
-import { Chat, ChatResponse } from '../types/chat';
+import { ChatResponse } from '../types/chat';
 import { Intent } from '../types/flow';
 import { findSimilarProduct } from '../getSuggestions';
 
@@ -18,12 +18,16 @@ class ProductSuggestionBySku extends Intent {
 
   readonly utterances = [
     {
-      name: '',
+      name: `produto \${SKU}`,
       matched: false,
       handler: (text: string): boolean => {
         const founded = text.match(/(\$\{([0-9]+)\})/gi);
+        console.log('ProductSuggestionBySku utterance handler', founded);
         if (founded) {
           const slot = this.slots.find(s => s.name === 'SKU');
+
+          console.log('slot', slot, 'founded value', founded[0].replace(/[^0-9]/gi, ''));
+
           slot.value = founded[0].replace(/[^0-9]/gi, '');
           slot.filled = true;
 

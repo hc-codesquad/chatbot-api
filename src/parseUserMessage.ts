@@ -26,6 +26,8 @@ export function parseUserMessage(
     intentFounded = intentFounded.nextAction();
   }
 
+  console.log('intent founded: ', intentFounded);
+
   if (!intentFounded) {
     return null;
   }
