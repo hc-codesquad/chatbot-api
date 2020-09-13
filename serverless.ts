@@ -13,12 +13,23 @@ const serverlessConfiguration: Serverless = {
       webpackConfig: './webpack.config.js',
       includeModules: true,
     },
+    dynamodb: {
+      stages: ['dev'],
+      start: {
+        port: 8000,
+        dbPath: './.dynamodb',
+        inMemory: false,
+        migrate: false,
+        seed: false,
+      },
+    },
   },
   // Add the serverless-webpack plugin
   plugins: [
     'serverless-webpack',
     'serverless-offline',
     'serverless-dynamodb-local',
+    'serverless-dotenv-plugin',
   ],
   provider: {
     name: 'aws',
@@ -28,7 +39,29 @@ const serverlessConfiguration: Serverless = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      DYNAMODB_CHATS_TABLE: 'chabot-api-dev-chats',
+      DYNAMODB_PRODUCT_SUGGESTIONS_TABLE: 'chabot-api-dev-product-suggestions',
     },
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: [
+          {
+            dynamodb: 'Query',
+          },
+          {
+            dynamodb: 'Scan',
+          },
+          {
+            dynamodb: 'GetItem',
+          },
+          {
+            dynamodb: 'PutItem',
+          },
+        ],
+        Resource: '*',
+      },
+    ],
   },
   functions: {
     chatbot: {
@@ -41,6 +74,56 @@ const serverlessConfiguration: Serverless = {
           },
         },
       ],
+    },
+  },
+  resources: {
+    Resources: {
+      ChatsDynamoDbTable: {
+        Type: 'AWS::DynamoDB::Table',
+        DeletionPolicy: 'Retain',
+        Properties: {
+          AttributeDefinitions: [
+            {
+              AttributeName: 'id',
+              AttributeType: 'S',
+            },
+          ],
+          KeySchema: [
+            {
+              AttributeName: 'id',
+              KeyType: 'HASH',
+            },
+          ],
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1,
+          },
+          TableName: 'chabot-api-dev-chats',
+        },
+      },
+      ProductSuggestionsDynamoDbTable: {
+        Type: 'AWS::DynamoDB::Table',
+        DeletionPolicy: 'Retain',
+        Properties: {
+          AttributeDefinitions: [
+            {
+              AttributeName: 'id',
+              AttributeType: 'S',
+            },
+          ],
+          KeySchema: [
+            {
+              AttributeName: 'id',
+              KeyType: 'HASH',
+            },
+          ],
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1,
+          },
+          TableName: 'chabot-api-dev-product-suggestions',
+        },
+      },
     },
   },
 };
