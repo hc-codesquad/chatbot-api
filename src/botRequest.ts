@@ -1,10 +1,11 @@
 import shortid from 'shortid';
 import { ChatRequest, ChatResponse } from './types/chat';
 
-export function parseBotRequest(body: { text?: string, chatId?: string }): ChatRequest {
+export function parseBotRequest(body: { text?: string, chatId?: string, sku?:string }): ChatRequest {
   return {
     text: body?.text || '',
     chatId: body?.chatId || shortid.generate(),
+    sku:body?.sku || ''
   };
 }
 
