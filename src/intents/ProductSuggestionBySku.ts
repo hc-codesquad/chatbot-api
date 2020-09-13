@@ -1,6 +1,6 @@
 import { ChatResponse } from '../types/chat';
 import { Intent } from '../types/flow';
-import { findSimilarProduct } from '../getSuggestions';
+import { getSkuProduct } from '../skuRequest';
 
 class ProductSuggestionBySku extends Intent {
   readonly id = 1;
@@ -38,8 +38,8 @@ class ProductSuggestionBySku extends Intent {
     },
   ];
 
-  finish(): ChatResponse {
-    const similarProducts = findSimilarProduct(this.slots[0].value);
+  async finish(): Promise<ChatResponse> {
+    const similarProducts = await getSkuProduct(this.slots[0].value);
     if (similarProducts) {
       return {
         suggestions: similarProducts,

@@ -14,16 +14,16 @@ function searchIntent(text: string, chat: Chat): Intent | null {
   );
 }
 
-export function parseUserMessage(
+export async function parseUserMessage(
   text: string,
   chat: Chat,
-): null | { chat: Chat; response: ChatResponse } {
+): Promise<null | { chat: Chat; response: ChatResponse }> {
   let intentFounded:
     | Intent
     | { intent: Intent; slot?: Slot; response: ChatResponse } = searchIntent(text, chat);
 
   while (intentFounded instanceof Intent) {
-    intentFounded = intentFounded.nextAction();
+    intentFounded = await intentFounded.nextAction();
   }
 
   console.log('intent founded: ', intentFounded);
