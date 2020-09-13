@@ -22,13 +22,12 @@ const chatbot: APIGatewayProxyHandler = async (event) => {
     if (!text) {
       response = sendDefaultMessage();
     } else {
-      console.log(getSkuProduct(sku)[0])
       response = {
         message: {
           text:
             'Ok, vou procurar aqui as melhores sugestões para você, só um minuto',
         },
-        suggestions:getSkuProduct(sku)
+        suggestions:await getSkuProduct(sku)
       };
     }
   } catch (e) {
