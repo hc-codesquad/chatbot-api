@@ -4,7 +4,8 @@ import {
   sendDefaultErrorMessage,
   sendDefaultMessage,
 } from './botRequest';
-import { ChatRequest, ChatResponse } from './types/chat';
+import { parseUserMessage } from './parseUserMessage';
+import { Chat, ChatRequest, ChatResponse } from './types/chat';
 
 const chatbot: APIGatewayProxyHandler = async (event) => {
   let response: ChatResponse;
@@ -18,15 +19,26 @@ const chatbot: APIGatewayProxyHandler = async (event) => {
 
     console.log('ChatID: ', chatId, 'text: ', text);
 
+    const chat: Chat = {
+      id: chatId,
+      context: {},
+    }
+
     if (!text) {
       response = sendDefaultMessage();
     } else {
-      response = {
-        message: {
-          text:
-            'Ok, vou procurar aqui as melhores sugestões para você, só um minuto',
-        },
-      };
+      const parse = parseUserMessage(text, chat);
+      if (parse) {
+        // @TODO grava chat no DB
+        response = parse.response;
+      } else {
+        response = {
+          message: {
+            text:
+              'Ok, vou procurar aqui as melhores sugestões para você, só um minuto',
+          },
+        };
+      }
     }
   } catch (e) {
     console.error('Bot error', e);
