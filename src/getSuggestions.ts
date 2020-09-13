@@ -1,7 +1,7 @@
 import { ProductSuggestion } from './types/product';
 
-export function findSimilarProduct(sku: number): ProductSuggestion | null {
-  if (sku === 1) {
+export function findSimilarProduct(sku: string): ProductSuggestion | null {
+  if (sku === '1') {
     return {
       skuId: 1,
       suggestions: [
