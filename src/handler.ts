@@ -4,8 +4,9 @@ import {
   sendDefaultErrorMessage,
   sendDefaultMessage,
 } from './botRequest';
-import { generateChatId } from './chatUtils';
+import { generateChatId, getChatById } from './chatUtils';
 import { parseUserMessage } from './parseUserMessage';
+import { putItem } from './resources/db/putItem';
 import { Chat, ChatRequest, ChatResponse } from './types/chat';
 
 const chatbot: APIGatewayProxyHandler = async (event) => {
@@ -31,10 +32,14 @@ const chatbot: APIGatewayProxyHandler = async (event) => {
   }
 
   try {
-    const chat: Chat = {
-      id: chatId,
-      context: {},
-    };
+    let chat = await getChatById(chatId);
+
+    if (!chat) {
+      chat = {
+        id: chatId,
+        context: {},
+      };
+    }
 
     if (!text) {
       response = sendDefaultMessage();
@@ -45,6 +50,8 @@ const chatbot: APIGatewayProxyHandler = async (event) => {
 
       if (parse) {
         // @TODO grava chat no DB
+        await putItem(chat);
+
         response = parse.response;
       } else {
         response = {

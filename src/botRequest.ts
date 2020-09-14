@@ -1,4 +1,5 @@
 import shortid from 'shortid';
+import { generateChatId } from './chatUtils';
 import { ChatRequest, ChatResponse } from './types/chat';
 
 export function parseBotRequest(body: { text?: string, chatId?: string, sku?: string }): ChatRequest {
@@ -11,6 +12,7 @@ export function parseBotRequest(body: { text?: string, chatId?: string, sku?: st
 
 export function sendDefaultMessage(): ChatResponse {
   return {
+    chatId: generateChatId(),
     message: {
       text: 'Olá, eu sou seu atendente virtual, em que posso ajudá-lo?',
     },

@@ -4,7 +4,7 @@
   "description": "API to Chatbot of HiringCoders project from team CodeSquad",
   "main": "src/handler.js",
   "scripts": {
-    "debug": "node --inspect=0.0.0.0 ./node_modules/serverless/bin/serverless.js offline start --stage dev",
+    "debug": "node --inspect ./node_modules/serverless/bin/serverless.js offline start --stage dev",
     "ddb-install": "serverless dynamodb install",
     "ddb-seed": "serverless dynamodb migrate && serverless dynamodb seed",
     "package": "serverless package",
