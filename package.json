@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.20",
+    "node-fetch": "^2.6.1",
     "shortid": "^2.2.15",
     "source-map-support": "^0.5.10"
   },

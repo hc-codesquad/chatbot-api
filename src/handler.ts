@@ -4,25 +4,37 @@ import {
   sendDefaultErrorMessage,
   sendDefaultMessage,
 } from './botRequest';
+import { generateChatId } from './chatUtils';
 import { parseUserMessage } from './parseUserMessage';
 import { Chat, ChatRequest, ChatResponse } from './types/chat';
 
 const chatbot: APIGatewayProxyHandler = async (event) => {
   let response: ChatResponse;
+  let chatId: string;
+  let text: string;
 
   try {
     const body = JSON.parse(event.body);
 
     const chatRequest: ChatRequest = parseBotRequest(body);
 
-    const { chatId, text } = chatRequest;
+    chatId = chatRequest?.chatId;
+    text = chatRequest?.text;
 
     console.log('ChatID: ', chatId, 'text: ', text);
+  } catch (e) {
+    console.error('Error when parsing bot request', e);
 
+    if (!chatId) {
+      chatId = generateChatId();
+    }
+  }
+
+  try {
     const chat: Chat = {
       id: chatId,
       context: {},
-    }
+    };
 
     if (!text) {
       response = sendDefaultMessage();
@@ -36,6 +48,7 @@ const chatbot: APIGatewayProxyHandler = async (event) => {
         response = parse.response;
       } else {
         response = {
+          chatId,
           message: {
             text:
               'Ok, vou procurar aqui as melhores sugestões para você, só um minuto',
@@ -48,6 +61,8 @@ const chatbot: APIGatewayProxyHandler = async (event) => {
 
     response = sendDefaultErrorMessage();
   }
+
+  response.chatId = chatId;
 
   return {
     statusCode: 200,

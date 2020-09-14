@@ -1,3 +1,4 @@
+import fetch from 'node-fetch';
 import { ProductSuggestion, Sku } from './types/product';
 
 async function getSkuId(sku): Promise<Sku> {
