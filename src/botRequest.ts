@@ -19,8 +19,9 @@ export function sendDefaultMessage(): ChatResponse {
   };
 }
 
-export function sendDefaultErrorMessage(): ChatResponse {
+export function sendDefaultErrorMessage( chatId?:string): ChatResponse {
   return {
+    chatId:chatId,
     message: {
       text: 'Desculpa, não entendi o que você falou, poderia tentar de outra forma?',
     },

@@ -66,7 +66,7 @@ const chatbot: APIGatewayProxyHandler = async (event) => {
   } catch (e) {
     console.error('Bot error', e);
 
-    response = sendDefaultErrorMessage();
+    response = sendDefaultErrorMessage(chatId);
   }
 
   response.chatId = chatId;
