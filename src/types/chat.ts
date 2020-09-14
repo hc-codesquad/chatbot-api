@@ -17,7 +17,7 @@ export interface Chat {
 export interface ChatRequest {
   chatId?: string;
   text?: string;
-  sku?:string;
+  sku?: string;
 }
 
 export interface ChatButton {
@@ -26,6 +26,7 @@ export interface ChatButton {
 }
 
 export interface ChatResponse {
+  chatId: string;
   message?: {
     text?: string;
     buttons?: ChatButton[];
