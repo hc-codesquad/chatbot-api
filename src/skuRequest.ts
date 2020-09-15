@@ -16,6 +16,7 @@ async function getSkuId(sku): Promise<Sku> {
     id: skuItem.Id,
     name: skuItem.Name,
     nameComplete: skuItem.NameComplete,
+    name: skuItem.NameComplete,
     url: skuItem.DetailUrl,
     imageUrl: skuItem?.Images[0]?.ImageUrl || skuItem.ImageUrl,
   };
