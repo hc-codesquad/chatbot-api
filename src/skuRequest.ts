@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import { ProductSuggestion, Sku } from './types/product';
+import { putItem } from './resources/db/putItem';
 
 async function getSkuId(sku): Promise<Sku> {
   const url = `${process.env.VTEX_API_BASE_URL}/api/catalog_system/pvt/sku/stockkeepingunitbyid/${sku}`;
@@ -11,16 +12,18 @@ async function getSkuId(sku): Promise<Sku> {
     },
   });
   const skuItem = await response.json();
+  console.log(putItem(skuItem));
   return {
     id: skuItem.Id,
     name: skuItem.SkuName,
+    nameComplete: skuItem.NameComplete,
     url: skuItem.DetailUrl,
     imageUrl: skuItem.ImageUrl,
   };
 }
 
 async function listAllSkus(): Promise<[]> {
-  const url = `${process.env.VTEX_STORE_STABLE_BASE_URL}/api/catalog_system/pvt/sku/stockkeepingunitids?page=1&pagesize=50`
+  const url = `${process.env.VTEX_STORE_STABLE_BASE_URL}/api/catalog_system/pvt/sku/stockkeepingunitids?page=1&pagesize=25`
   const listSkus = await fetch(url, {
     headers: {
       'x-vtex-api-apptoken': process.env.VTEX_API_APP_TOKEN,
@@ -29,6 +32,7 @@ async function listAllSkus(): Promise<[]> {
   });
 
   const response = await listSkus.json();
+
   return response;
 }
 
@@ -61,4 +65,11 @@ export async function getSkuProduct(sku): Promise<ProductSuggestion> {
 
 export async function addToProductToCart(sku: string, quantity: string): Promise<string> {
   return `${process.env.VTEX_STORE_BETA_BASE_URL}/checkout/cart/add/?sku=${sku}&qty=${quantity}&seller=1&sc=1`;
+}
+
+export async function putSkusSuggestions() {
+  const skus = <number[]>await listAllSkus();
+  skus.forEach(async id => {
+    await getSkuProduct(id);
+  });
 }
