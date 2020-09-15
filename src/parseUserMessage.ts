@@ -9,7 +9,9 @@ function searchIntent(text: string, chat: Chat): Intent | null {
 
   if (chat.context?.currentIntent) {
     currentIntent =
-      availableIntents.find(intent => intent.tryToResolve(text, chat)) || null;
+      availableIntents.find(
+        intent => intent.id == chat.context?.currentIntent.id,
+      ) || null;
   }
 
   return (

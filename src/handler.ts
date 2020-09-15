@@ -48,7 +48,6 @@ const chatbot: APIGatewayProxyHandler = async (event) => {
       console.log('parseUserMessage', parse);
 
       if (parse) {
-        // @TODO grava chat no DB
         await putChat(chat);
 
         response = parse.response;
