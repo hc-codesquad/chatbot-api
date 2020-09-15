@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { getSuggestionBySkuId, putSuggestion } from './productSuggestionsUtils';
 import { ProductSuggestion, Sku } from './types/product';
 import { putItem } from './resources/db/putItem';
 
@@ -18,7 +19,7 @@ async function getSkuId(sku): Promise<Sku> {
     name: skuItem.SkuName,
     nameComplete: skuItem.NameComplete,
     url: skuItem.DetailUrl,
-    imageUrl: skuItem.ImageUrl,
+    imageUrl: skuItem?.Images[0]?.ImageUrl || skuItem.ImageUrl,
   };
 }
 
@@ -37,30 +38,38 @@ async function listAllSkus(): Promise<[]> {
 }
 
 export async function getSkuProduct(sku): Promise<ProductSuggestion> {
+  const storedSuggestion = await getSuggestionBySkuId(sku);
+  if (storedSuggestion) {
+    return storedSuggestion;
+  }
 
   const skuRecebido: Sku = await getSkuId(sku);
   const skus = <number[]>await listAllSkus();
 
   const similarProducts = await Promise.all(
     skus.map(async id => {
-      const sku = await getSkuId(id);
-      if (id !== skuRecebido.id && sku.name === skuRecebido.name) {
-        return sku;
+      const currentSku = await getSkuId(id);
+      if (id !== skuRecebido.id && currentSku.name === skuRecebido.name) {
+        return currentSku;
       }
     }),
   );
 
   const products = {
-    id: 1,
-    skus: similarProducts.filter(sku => sku)
-  }
+    id: sku,
+    skus: similarProducts.filter(s => s),
+  };
 
-  return {
+  const suggestion: ProductSuggestion = {
     skuId: products.id,
     suggestions: products.skus,
-    createdAt: new Date(),
+    createdAt: new Date().toISOString(),
     ttl: 3000,
   };
+
+  await putSuggestion(suggestion);
+
+  return suggestion;
 }
 
 export async function addToProductToCart(sku: string, quantity: string): Promise<string> {

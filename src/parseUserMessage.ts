@@ -5,12 +5,19 @@ import ProductSuggestionBySku from './intents/ProductSuggestionBySku';
 const availableIntents: Intent[] = [new ProductSuggestionBySku()];
 
 function searchIntent(text: string, chat: Chat): Intent | null {
+  let currentIntent: Intent | null;
+
   if (chat.context?.currentIntent) {
-    return chat.context?.currentIntent;
+    currentIntent =
+      availableIntents.find(
+        intent => intent.id == chat.context?.currentIntent.id,
+      ) || null;
   }
 
   return (
-    availableIntents.find(intent => intent.tryToResolve(text, chat)) || null
+    currentIntent ||
+    availableIntents.find(intent => intent.tryToResolve(text, chat)) ||
+    null
   );
 }
 
@@ -22,7 +29,7 @@ export async function parseUserMessage(
     | Intent
     | { intent: Intent; slot?: Slot; response: ChatResponse } = searchIntent(text, chat);
 
-  while (intentFounded instanceof Intent) {
+  while ('utterances' in intentFounded) {
     intentFounded = await intentFounded.nextAction();
   }
 

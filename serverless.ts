@@ -16,7 +16,7 @@ const serverlessConfiguration: Serverless = {
     dynamodb: {
       stages: ['dev'],
       start: {
-        port: 8000,
+        port: '8000',
         dbPath: './.dynamodb',
         inMemory: false,
         migrate: false,
@@ -27,9 +27,9 @@ const serverlessConfiguration: Serverless = {
   // Add the serverless-webpack plugin
   plugins: [
     'serverless-webpack',
-    'serverless-offline',
     'serverless-dynamodb-local',
     'serverless-dotenv-plugin',
+    'serverless-offline',
   ],
   provider: {
     name: 'aws',
@@ -46,18 +46,10 @@ const serverlessConfiguration: Serverless = {
       {
         Effect: 'Allow',
         Action: [
-          {
-            dynamodb: 'Query',
-          },
-          {
-            dynamodb: 'Scan',
-          },
-          {
-            dynamodb: 'GetItem',
-          },
-          {
-            dynamodb: 'PutItem',
-          },
+          'dynamodb:Query',
+          'dynamodb:Scan',
+          'dynamodb:GetItem',
+          'dynamodb:PutItem',
         ],
         Resource: '*',
       },
@@ -99,7 +91,7 @@ const serverlessConfiguration: Serverless = {
             ReadCapacityUnits: 1,
             WriteCapacityUnits: 1,
           },
-          TableName: 'chabot-api-dev-chats',
+          TableName: 'chatbot-api-dev-chats',
         },
       },
       ProductSuggestionsDynamoDbTable: {
@@ -108,13 +100,13 @@ const serverlessConfiguration: Serverless = {
         Properties: {
           AttributeDefinitions: [
             {
-              AttributeName: 'id',
+              AttributeName: 'skuId',
               AttributeType: 'S',
             },
           ],
           KeySchema: [
             {
-              AttributeName: 'id',
+              AttributeName: 'skuId',
               KeyType: 'HASH',
             },
           ],
@@ -122,7 +114,7 @@ const serverlessConfiguration: Serverless = {
             ReadCapacityUnits: 1,
             WriteCapacityUnits: 1,
           },
-          TableName: 'chabot-api-dev-product-suggestions',
+          TableName: 'chatbot-api-dev-product-suggestions',
         },
       },
     },
