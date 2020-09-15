@@ -13,7 +13,6 @@ async function getSkuId(sku): Promise<Sku> {
     },
   });
   const skuItem = await response.json();
-  console.log(putItem(skuItem));
   return {
     id: skuItem.Id,
     name: skuItem.SkuName,
