@@ -13,7 +13,7 @@ async function getSkuId(sku): Promise<Sku> {
   const skuItem = await response.json();
   return {
     id: skuItem.Id,
-    name: skuItem.SkuName,
+    name: skuItem.NameComplete,
     url: skuItem.DetailUrl,
     imageUrl: skuItem.ImageUrl,
   };
@@ -47,7 +47,7 @@ export async function getSkuProduct(sku): Promise<ProductSuggestion> {
   );
 
   const products = {
-    id: 1,
+    id: skuRecebido.id,
     skus: similarProducts.filter(sku => sku)
   }
 
