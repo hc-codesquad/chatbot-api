@@ -1,6 +1,7 @@
 export interface Sku {
   id: number;
   name: string;
+  nameComplete:string;
   url: string;
   imageUrl?: string;
 }
