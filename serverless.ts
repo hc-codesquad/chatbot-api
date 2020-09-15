@@ -71,6 +71,7 @@ const serverlessConfiguration: Serverless = {
           http: {
             method: 'post',
             path: 'chatbot',
+            cors: true,
           },
         },
       ],
