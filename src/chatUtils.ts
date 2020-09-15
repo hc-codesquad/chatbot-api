@@ -5,7 +5,7 @@ import { Chat } from './types/chat';
 
 export async function getChatById(chatId: string): Promise<Chat> {
   const chat = await getItem({
-    Table: process.env.DYNAMODB_CHATS_TABLE,
+    TableName: process.env.DYNAMODB_CHATS_TABLE,
     Key: {
       id: chatId,
     },
@@ -16,7 +16,7 @@ export async function getChatById(chatId: string): Promise<Chat> {
 
 export function putChat(chat: Chat): Promise<any> {
   return putItem({
-    Table: process.env.DYNAMODB_CHATS_TABLE,
+    TableName: process.env.DYNAMODB_CHATS_TABLE,
     Item: chat,
   });
 }

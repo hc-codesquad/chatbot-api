@@ -12,4 +12,5 @@ jspm_packages
 #idea folder
 /.idea
 
+yarn-error.log
 .env 
