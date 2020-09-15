@@ -1,6 +1,7 @@
 export interface Sku {
   id: number;
   name: string;
+  nameComplete?: string;
   url: string;
   imageUrl?: string;
 }
@@ -8,6 +9,6 @@ export interface Sku {
 export interface ProductSuggestion {
   skuId: number;
   suggestions: Sku[];
-  createdAt: Date;
+  createdAt: string;
   ttl: number;
 }
