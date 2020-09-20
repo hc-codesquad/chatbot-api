@@ -4,7 +4,7 @@ import {
   sendDefaultErrorMessage,
   sendDefaultMessage,
 } from './botRequest';
-import { parseBillingAddress, parseBuyerRequest, parseCardRequest, parseExpirationRequest, parseItemsRequest, parseMiniCartRequest, parsePaymentRequest, parseShippingaddressRequest } from './paymentRequest'
+import { parseBillingAddress, parseBuyerRequest, parseCardRequest, parseExpirationRequest, parseItemsRequest, parseMiniCartRequest, parsePaymentRequest, parseShippingaddressRequest, successApproved } from './paymentRequest'
 import { generateChatId, getChatById, putChat } from './chatUtils';
 import { parseUserMessage } from './parseUserMessage';
 import { Chat, ChatRequest, ChatResponse } from './types/chat';
@@ -112,14 +112,14 @@ const payments: APIGatewayProxyHandler = async (event) => {
   const items = parseItemsRequest(body.miniCart.items);
   const miniCart = parseMiniCartRequest(body.miniCart, buyer, shippingAddress, billingAddress, items)
   const paymentRequest: Payment = parsePaymentRequest(body, card, miniCart);
-  
+  const approved = successApproved();
   return {
     statusCode: 200,
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
     },
-    body: JSON.stringify(paymentRequest, null, 2),
+    body: JSON.stringify({ ...paymentRequest, approved }, null, 2),
   };
 }
 
