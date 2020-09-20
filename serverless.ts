@@ -68,13 +68,25 @@ const serverlessConfiguration: Serverless = {
         },
       ],
     },
-    payment:{
+    paymentMethods:{
       handler: 'src/handler.paymentMethods',
       events: [
         {
           http: {
             method: 'get',
             path: 'payment-methods',
+            cors: true,
+          },
+        },
+      ],
+    },
+    payments:{
+      handler: 'src/handler.payments',
+      events: [
+        {
+          http: {
+            method: 'post',
+            path: 'payments',
             cors: true,
           },
         },

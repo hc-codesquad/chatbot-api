@@ -4,9 +4,11 @@ import {
   sendDefaultErrorMessage,
   sendDefaultMessage,
 } from './botRequest';
+import { parseBillingAddress, parseBuyerRequest, parseCardRequest, parseExpirationRequest, parseItemsRequest, parseMiniCartRequest, parsePaymentRequest, parseShippingaddressRequest, successApproved } from './paymentRequest'
 import { generateChatId, getChatById, putChat } from './chatUtils';
 import { parseUserMessage } from './parseUserMessage';
 import { Chat, ChatRequest, ChatResponse } from './types/chat';
+import { Payment } from './types/payment';
 
 const chatbot: APIGatewayProxyHandler = async (event) => {
   let response: ChatResponse;
@@ -100,4 +102,25 @@ const paymentMethods: APIGatewayProxyHandler = async (event) => {
   };
 }
 
-export { chatbot, paymentMethods };
+const payments: APIGatewayProxyHandler = async (event) => {
+  const body = JSON.parse(event.body);
+  const expiration = parseExpirationRequest(body.card.expiration)
+  const card = parseCardRequest(body.card, expiration);
+  const buyer = parseBuyerRequest(body.miniCart.buyer);
+  const shippingAddress = parseShippingaddressRequest(body.miniCart.shippingAddress);
+  const billingAddress = parseBillingAddress(body.miniCart.billingAddress);
+  const items = parseItemsRequest(body.miniCart.items);
+  const miniCart = parseMiniCartRequest(body.miniCart, buyer, shippingAddress, billingAddress, items)
+  const paymentRequest: Payment = parsePaymentRequest(body, card, miniCart);
+  const approved = successApproved();
+  return {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
+    body: JSON.stringify({ ...paymentRequest, approved }, null, 2),
+  };
+}
+
+export { chatbot, paymentMethods, payments };
