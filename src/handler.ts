@@ -79,4 +79,25 @@ const chatbot: APIGatewayProxyHandler = async (event) => {
   };
 };
 
-export { chatbot };
+const paymentMethods: APIGatewayProxyHandler = async (event) => {
+  const methods = {
+    "paymentMethods": [
+      "Visa",
+      "Mastercard",
+      "American Express",
+      "BankInvoice",
+      "Privatelabels",
+      "Promissories"
+    ]
+  }
+  return {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
+    body: JSON.stringify(methods, null, 2),
+  };
+}
+
+export { chatbot, paymentMethods };
