@@ -119,7 +119,7 @@ const payments: APIGatewayProxyHandler = async (event) => {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
     },
-    body: JSON.stringify({ ...paymentRequest, approved }, null, 2),
+    body: JSON.stringify({ approved }, null, 2),
   };
 }
 

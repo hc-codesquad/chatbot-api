@@ -139,7 +139,7 @@ export function parseItemsRequest(items: Item[]): Item[] {
 export function successApproved(){
   return {
     paymentId: "F5C1A4E20D3B4E07B7E871F5B5BC9F91",
-    status: "undefined",
+    status: "approved",
     tid: "TID1578324421",
     authorizationId: null,
     nsu: null,
