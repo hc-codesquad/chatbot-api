@@ -93,7 +93,7 @@ const serverlessConfiguration: Serverless = {
       ],
     },
   },
-  resources: {
+ /*  resources: {
     Resources: {
       ChatsDynamoDbTable: {
         Type: 'AWS::DynamoDB::Table',
@@ -142,7 +142,7 @@ const serverlessConfiguration: Serverless = {
         },
       },
     },
-  },
+  }, */
 };
 
 module.exports = serverlessConfiguration;
