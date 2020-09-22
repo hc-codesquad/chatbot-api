@@ -137,7 +137,7 @@ export function parseItemsRequest(items: Item[]): Item[] {
 }
 
 export function successApproved(){
-  return {
+  return {approved: {
     paymentId: "F5C1A4E20D3B4E07B7E871F5B5BC9F91",
     status: "approved",
     tid: "TID1578324421",
@@ -152,5 +152,5 @@ export function successApproved(){
     delayToAutoSettle: 1209600,
     delayToAutoSettleAfterAntifraud: 120,
     delayToCancel: 1209600
-  }
+  }}
 }
