@@ -168,7 +168,7 @@ const paymentsRefunds: APIGatewayProxyHandler = async (event) => {
 
 const paymentsCancellations: APIGatewayProxyHandler = async (event) => {
   const body = JSON.parse(event.body);
-  const refund = {
+  const cancel = {
     "paymentId": body.paymentId,
     "cancellationId": null,
     "code": "cancel-manually",
@@ -182,7 +182,7 @@ const paymentsCancellations: APIGatewayProxyHandler = async (event) => {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
     },
-    body: JSON.stringify(refund, null, 2),
+    body: JSON.stringify(cancel, null, 2),
   };
 }
 
