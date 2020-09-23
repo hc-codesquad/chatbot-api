@@ -6,7 +6,7 @@ import {
   sendDefaultErrorMessage,
   sendDefaultMessage,
 } from './botRequest';
-import { parseBillingAddress, parseBuyerRequest, parseCardRequest, parseExpirationRequest, parseItemsRequest, parseMiniCartRequest, parsePaymentRequest, parseShippingaddressRequest, paymentSituation } from './paymentRequest'
+import { parseBillingAddress, parseBuyerRequest, parseCardRequest, parseExpirationRequest, parseItemsRequest, parseMiniCartRequest, parsePaymentRequest, parseShippingaddressRequest, cardValidation } from './paymentRequest'
 import { generateChatId, getChatById, putChat } from './chatUtils';
 import { parseUserMessage } from './parseUserMessage';
 import { Chat, ChatRequest, ChatResponse } from './types/chat';
@@ -114,17 +114,7 @@ const payments: APIGatewayProxyHandler = async (event) => {
   const items = parseItemsRequest(body.miniCart.items);
   const miniCart = parseMiniCartRequest(body.miniCart, buyer, shippingAddress, billingAddress, items)
   const paymentRequest: Payment = parsePaymentRequest(body, card, miniCart);
-  let result = {};
-  if (card.number == '4444333322221111') {
-    result = paymentSituation(paymentRequest,'approved');
-  } else if (card.number == '4444333322221112') {
-    result = paymentSituation(paymentRequest, 'denied');
-  } else if(card.number == '4222222222222224'){
-    result = paymentSituation(paymentRequest, "undefined");
-    
-  }
-
-
+  const result = cardValidation(paymentRequest, card.number);
   return {
     statusCode: 200,
     headers: {

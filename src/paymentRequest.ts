@@ -137,7 +137,7 @@ export function parseItemsRequest(items: Item[]): Item[] {
 }
 
 
-export function paymentSituation(payment,status) {
+export function paymentSituation(payment, status) {
   return {
     paymentId: payment.paymentId,
     status: status,
@@ -154,5 +154,15 @@ export function paymentSituation(payment,status) {
     delayToAutoSettleAfterAntifraud: 120,
     delayToCancel: 1209600
   }
+}
+
+export function cardValidation(payment, cardNumber) {
+  const validation = {
+    '4444333322221111': paymentSituation(payment, 'approved'),
+    '4444333322221112': paymentSituation(payment, 'denied'),
+    '4222222222222224': paymentSituation(payment, 'undefined')
+  }
+
+  return cardNumber ? validation[cardNumber] : paymentSituation(payment, 'undefined')
 }
 
