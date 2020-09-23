@@ -92,6 +92,18 @@ const serverlessConfiguration: Serverless = {
         },
       ],
     },
+    paymentsSettlements:{
+      handler: 'src/handler.paymentsSettlements',
+      events: [
+        {
+          http: {
+            method: 'post',
+            path: 'payments/{paymentId}/settlements',
+            cors: true,
+          },
+        },
+      ],
+    },
   },
  /*  resources: {
     Resources: {

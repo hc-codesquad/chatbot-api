@@ -136,13 +136,14 @@ export function parseItemsRequest(items: Item[]): Item[] {
   return lista
 }
 
-export function successApproved(){
+
+export function successApproved(payment) {
   return {
-    paymentId: "F5C1A4E20D3B4E07B7E871F5B5BC9F91",
+    paymentId: payment.paymentId,
     status: "approved",
     tid: "TID1578324421",
-    authorizationId: null,
-    nsu: null,
+    authorizationId: "AUT123567",
+    nsu: "NSU987432",
     code: "APP123",
     paymentAppData: {
       appName: "vendor.payment-auth-app",
