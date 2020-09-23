@@ -137,10 +137,10 @@ export function parseItemsRequest(items: Item[]): Item[] {
 }
 
 
-export function successApproved(payment) {
+export function paymentSituation(payment,status) {
   return {
     paymentId: payment.paymentId,
-    status: "approved",
+    status: status,
     tid: "TID1578324421",
     authorizationId: "AUT123567",
     nsu: "NSU987432",
@@ -156,21 +156,3 @@ export function successApproved(payment) {
   }
 }
 
-export function successDenied(payment) {
-  return {
-    paymentId: payment.paymentId,
-    status: "denied",
-    tid: "TID1578324421",
-    authorizationId: "AUT123567",
-    nsu: "NSU987432",
-    code: "APP123",
-    paymentAppData: {
-      appName: "vendor.payment-auth-app",
-      payload: "{\"backendUrl\":\"https://api.example.org/payments/F5C1A4E20D3B4E07B7E871F5B5BC9F91\",\"randomString\":\"78818C2C64264212B8D5771BDC7B1A\",\"randomBool\":false,\"timestamp\":\"2019-10-07 21:30:09Z\"}"
-    },
-    message: "The customer needs to finish the payment flow ok",
-    delayToAutoSettle: 1209600,
-    delayToAutoSettleAfterAntifraud: 120,
-    delayToCancel: 1209600
-  }
-}

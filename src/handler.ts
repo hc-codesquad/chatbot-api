@@ -1,10 +1,12 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
+import fetch from 'node-fetch';
+
 import {
   parseBotRequest,
   sendDefaultErrorMessage,
   sendDefaultMessage,
 } from './botRequest';
-import { parseBillingAddress, parseBuyerRequest, parseCardRequest, parseExpirationRequest, parseItemsRequest, parseMiniCartRequest, parsePaymentRequest, parseShippingaddressRequest, successApproved, successDenied } from './paymentRequest'
+import { parseBillingAddress, parseBuyerRequest, parseCardRequest, parseExpirationRequest, parseItemsRequest, parseMiniCartRequest, parsePaymentRequest, parseShippingaddressRequest, paymentSituation } from './paymentRequest'
 import { generateChatId, getChatById, putChat } from './chatUtils';
 import { parseUserMessage } from './parseUserMessage';
 import { Chat, ChatRequest, ChatResponse } from './types/chat';
@@ -113,10 +115,13 @@ const payments: APIGatewayProxyHandler = async (event) => {
   const miniCart = parseMiniCartRequest(body.miniCart, buyer, shippingAddress, billingAddress, items)
   const paymentRequest: Payment = parsePaymentRequest(body, card, miniCart);
   let result = {};
-  if(card.number == '4444333322221111'){
-    result = successApproved(paymentRequest);
-  }else if(card.number == '4444333322221112'){
-    result = successDenied(paymentRequest);
+  if (card.number == '4444333322221111') {
+    result = paymentSituation(paymentRequest,'approved');
+  } else if (card.number == '4444333322221112') {
+    result = paymentSituation(paymentRequest, 'denied');
+  } else if(card.number == '4222222222222224'){
+    result = paymentSituation(paymentRequest, "undefined");
+    
   }
 
 
@@ -171,4 +176,24 @@ const paymentsRefunds: APIGatewayProxyHandler = async (event) => {
   };
 }
 
-export { chatbot, paymentMethods, payments, paymentsSettlements, paymentsRefunds };
+const paymentsCancellations: APIGatewayProxyHandler = async (event) => {
+  const body = JSON.parse(event.body);
+  const refund = {
+    "paymentId": body.paymentId,
+    "cancellationId": null,
+    "code": "cancel-manually",
+    "message": "Sucessfully cancelled",
+    "requestId": body.requestId
+  }
+
+  return {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
+    body: JSON.stringify(refund, null, 2),
+  };
+}
+
+export { chatbot, paymentMethods, payments, paymentsSettlements, paymentsRefunds, paymentsCancellations };

@@ -116,6 +116,18 @@ const serverlessConfiguration: Serverless = {
         },
       ],
     },
+    paymentsCancellations:{
+      handler: 'src/handler.paymentsCancellations',
+      events: [
+        {
+          http: {
+            method: 'post',
+            path: 'payments/{paymentId}/cancellations',
+            cors: true,
+          },
+        },
+      ],
+    },
   },
  /*  resources: {
     Resources: {
