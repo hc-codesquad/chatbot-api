@@ -4,7 +4,7 @@ import {
   sendDefaultErrorMessage,
   sendDefaultMessage,
 } from './botRequest';
-import { parseBillingAddress, parseBuyerRequest, parseCardRequest, parseExpirationRequest, parseItemsRequest, parseMiniCartRequest, parsePaymentRequest, parseShippingaddressRequest, successApproved } from './paymentRequest'
+import { parseBillingAddress, parseBuyerRequest, parseCardRequest, parseExpirationRequest, parseItemsRequest, parseMiniCartRequest, parsePaymentRequest, parseShippingaddressRequest, successApproved, successDenied } from './paymentRequest'
 import { generateChatId, getChatById, putChat } from './chatUtils';
 import { parseUserMessage } from './parseUserMessage';
 import { Chat, ChatRequest, ChatResponse } from './types/chat';
@@ -112,14 +112,21 @@ const payments: APIGatewayProxyHandler = async (event) => {
   const items = parseItemsRequest(body.miniCart.items);
   const miniCart = parseMiniCartRequest(body.miniCart, buyer, shippingAddress, billingAddress, items)
   const paymentRequest: Payment = parsePaymentRequest(body, card, miniCart);
-  const approved = successApproved(paymentRequest);
+  let result = {};
+  if(card.number == '4444333322221111'){
+    result = successApproved(paymentRequest);
+  }else if(card.number == '4444333322221112'){
+    result = successDenied(paymentRequest);
+  }
+
+
   return {
     statusCode: 200,
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
     },
-    body: JSON.stringify(approved, null, 2),
+    body: JSON.stringify(result, null, 2),
   };
 }
 const paymentsSettlements: APIGatewayProxyHandler = async (event) => {
