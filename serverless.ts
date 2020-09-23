@@ -92,8 +92,32 @@ const serverlessConfiguration: Serverless = {
         },
       ],
     },
+    paymentsSettlements:{
+      handler: 'src/handler.paymentsSettlements',
+      events: [
+        {
+          http: {
+            method: 'post',
+            path: 'payments/{paymentId}/settlements',
+            cors: true,
+          },
+        },
+      ],
+    },
+    paymentsRefunds:{
+      handler: 'src/handler.paymentsRefunds',
+      events: [
+        {
+          http: {
+            method: 'post',
+            path: 'payments/{paymentId}/refunds',
+            cors: true,
+          },
+        },
+      ],
+    },
   },
-  resources: {
+ /*  resources: {
     Resources: {
       ChatsDynamoDbTable: {
         Type: 'AWS::DynamoDB::Table',
@@ -142,7 +166,7 @@ const serverlessConfiguration: Serverless = {
         },
       },
     },
-  },
+  }, */
 };
 
 module.exports = serverlessConfiguration;

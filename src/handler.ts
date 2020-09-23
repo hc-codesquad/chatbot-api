@@ -112,15 +112,56 @@ const payments: APIGatewayProxyHandler = async (event) => {
   const items = parseItemsRequest(body.miniCart.items);
   const miniCart = parseMiniCartRequest(body.miniCart, buyer, shippingAddress, billingAddress, items)
   const paymentRequest: Payment = parsePaymentRequest(body, card, miniCart);
-  const approved = successApproved();
+  const approved = successApproved(paymentRequest);
   return {
     statusCode: 200,
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
     },
-    body: JSON.stringify({ ...paymentRequest, approved }, null, 2),
+    body: JSON.stringify(approved, null, 2),
+  };
+}
+const paymentsSettlements: APIGatewayProxyHandler = async (event) => {
+  const body = JSON.parse(event.body);
+  const set = {
+    "paymentId": body.paymentId,
+    "settleId": "2EA354989E7E4BBC9F9D7B66674C2574",
+    "value": body.value,
+    "code": null,
+    "message": "Sucessfully settled",
+    "requestId": body.requestId
+  }
+
+  return {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
+    body: JSON.stringify(set, null, 2),
   };
 }
 
-export { chatbot, paymentMethods, payments };
+const paymentsRefunds: APIGatewayProxyHandler = async (event) => {
+  const body = JSON.parse(event.body);
+  const refund = {
+    "paymentId": body.paymentId,
+    "refundId": null,
+    "value": 0,
+    "code": "refund-manually",
+    "message": "Refund has failed due to an internal error",
+    "requestId": body.requestId
+  }
+
+  return {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
+    body: JSON.stringify(refund, null, 2),
+  };
+}
+
+export { chatbot, paymentMethods, payments, paymentsSettlements, paymentsRefunds };
