@@ -143,5 +143,25 @@ const paymentsSettlements: APIGatewayProxyHandler = async (event) => {
   };
 }
 
+const paymentsRefunds: APIGatewayProxyHandler = async (event) => {
+  const body = JSON.parse(event.body);
+  const refund = {
+    "paymentId": body.paymentId,
+    "refundId": null,
+    "value": 0,
+    "code": "refund-manually",
+    "message": "Refund has failed due to an internal error",
+    "requestId": body.requestId
+  }
 
-export { chatbot, paymentMethods, payments, paymentsSettlements };
+  return {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
+    body: JSON.stringify(refund, null, 2),
+  };
+}
+
+export { chatbot, paymentMethods, payments, paymentsSettlements, paymentsRefunds };

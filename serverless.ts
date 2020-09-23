@@ -104,6 +104,18 @@ const serverlessConfiguration: Serverless = {
         },
       ],
     },
+    paymentsRefunds:{
+      handler: 'src/handler.paymentsRefunds',
+      events: [
+        {
+          http: {
+            method: 'post',
+            path: 'payments/{paymentId}/refunds',
+            cors: true,
+          },
+        },
+      ],
+    },
   },
  /*  resources: {
     Resources: {
