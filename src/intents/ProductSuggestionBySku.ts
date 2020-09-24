@@ -42,11 +42,13 @@ class ProductSuggestionBySku extends Intent {
     const similarProducts = await getSkuProduct(this.slots[0].value);
     if (similarProducts) {
       return {
+        chatId:"",
         suggestions: similarProducts,
       };
     }
 
     return {
+      chatId:"",
       message: {
         text:
           'Não encontramos nenhum produto similar, gostaria de procurar algum outro produto?',

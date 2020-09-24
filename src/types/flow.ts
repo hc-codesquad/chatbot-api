@@ -56,6 +56,7 @@ export abstract class Intent {
           intent: this,
           slot,
           response: {
+            chatId:'',
             message: {
               text: slot.question,
             },
