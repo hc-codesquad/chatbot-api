@@ -6,16 +6,29 @@ import {
   sendDefaultErrorMessage,
   sendDefaultMessage,
 } from './botRequest';
-import { parseBillingAddress, parseBuyerRequest, parseCardRequest, parseExpirationRequest, parseItemsRequest, parseMiniCartRequest, parsePaymentRequest, parseShippingaddressRequest, cardValidation } from './paymentRequest'
+import {
+  parseBillingAddress,
+  parseBuyerRequest,
+  parseCardRequest,
+  parseExpirationRequest,
+  parseItemsRequest,
+  parseMiniCartRequest,
+  parsePaymentRequest,
+  parseShippingaddressRequest,
+  cardValidation,
+} from './paymentRequest';
 import { generateChatId, getChatById, putChat } from './chatUtils';
 import { parseUserMessage } from './parseUserMessage';
 import { Chat, ChatRequest, ChatResponse } from './types/chat';
 import { Payment } from './types/payment';
+import { getIntent } from './tensorflow';
 
-const chatbot: APIGatewayProxyHandler = async (event) => {
+const chatbot: APIGatewayProxyHandler = async event => {
   let response: ChatResponse;
   let chatId: string;
   let text: string;
+  let language: string;
+  let responseTensorFlow: any;
 
   try {
     const body = JSON.parse(event.body);
@@ -24,7 +37,7 @@ const chatbot: APIGatewayProxyHandler = async (event) => {
 
     chatId = chatRequest?.chatId;
     text = chatRequest?.text;
-
+    text = chatRequest?.language;
     console.log('ChatID: ', chatId, 'text: ', text);
   } catch (e) {
     console.error('Error when parsing bot request', e);
@@ -83,17 +96,17 @@ const chatbot: APIGatewayProxyHandler = async (event) => {
   };
 };
 
-const paymentMethods: APIGatewayProxyHandler = async (event) => {
+const paymentMethods: APIGatewayProxyHandler = async event => {
   const methods = {
-    "paymentMethods": [
-      "Visa",
-      "Mastercard",
-      "American Express",
-      "BankInvoice",
-      "Privatelabels",
-      "Promissories"
-    ]
-  }
+    paymentMethods: [
+      'Visa',
+      'Mastercard',
+      'American Express',
+      'BankInvoice',
+      'Privatelabels',
+      'Promissories',
+    ],
+  };
   return {
     statusCode: 200,
     headers: {
@@ -102,17 +115,25 @@ const paymentMethods: APIGatewayProxyHandler = async (event) => {
     },
     body: JSON.stringify(methods, null, 2),
   };
-}
+};
 
-const payments: APIGatewayProxyHandler = async (event) => {
+const payments: APIGatewayProxyHandler = async event => {
   const body = JSON.parse(event.body);
-  const expiration = parseExpirationRequest(body.card.expiration)
+  const expiration = parseExpirationRequest(body.card.expiration);
   const card = parseCardRequest(body.card, expiration);
   const buyer = parseBuyerRequest(body.miniCart.buyer);
-  const shippingAddress = parseShippingaddressRequest(body.miniCart.shippingAddress);
+  const shippingAddress = parseShippingaddressRequest(
+    body.miniCart.shippingAddress,
+  );
   const billingAddress = parseBillingAddress(body.miniCart.billingAddress);
   const items = parseItemsRequest(body.miniCart.items);
-  const miniCart = parseMiniCartRequest(body.miniCart, buyer, shippingAddress, billingAddress, items)
+  const miniCart = parseMiniCartRequest(
+    body.miniCart,
+    buyer,
+    shippingAddress,
+    billingAddress,
+    items,
+  );
   const paymentRequest: Payment = parsePaymentRequest(body, card, miniCart);
   const result = cardValidation(paymentRequest, card.number);
   return {
@@ -123,17 +144,17 @@ const payments: APIGatewayProxyHandler = async (event) => {
     },
     body: JSON.stringify(result, null, 2),
   };
-}
-const paymentsSettlements: APIGatewayProxyHandler = async (event) => {
+};
+const paymentsSettlements: APIGatewayProxyHandler = async event => {
   const body = JSON.parse(event.body);
   const set = {
-    "paymentId": body.paymentId,
-    "settleId": "2EA354989E7E4BBC9F9D7B66674C2574",
-    "value": body.value,
-    "code": null,
-    "message": "Sucessfully settled",
-    "requestId": body.requestId
-  }
+    paymentId: body.paymentId,
+    settleId: '2EA354989E7E4BBC9F9D7B66674C2574',
+    value: body.value,
+    code: null,
+    message: 'Sucessfully settled',
+    requestId: body.requestId,
+  };
 
   return {
     statusCode: 200,
@@ -143,18 +164,18 @@ const paymentsSettlements: APIGatewayProxyHandler = async (event) => {
     },
     body: JSON.stringify(set, null, 2),
   };
-}
+};
 
-const paymentsRefunds: APIGatewayProxyHandler = async (event) => {
+const paymentsRefunds: APIGatewayProxyHandler = async event => {
   const body = JSON.parse(event.body);
   const refund = {
-    "paymentId": body.paymentId,
-    "refundId": null,
-    "value": 0,
-    "code": "refund-manually",
-    "message": "Refund has failed due to an internal error",
-    "requestId": body.requestId
-  }
+    paymentId: body.paymentId,
+    refundId: null,
+    value: 0,
+    code: 'refund-manually',
+    message: 'Refund has failed due to an internal error',
+    requestId: body.requestId,
+  };
 
   return {
     statusCode: 200,
@@ -164,17 +185,17 @@ const paymentsRefunds: APIGatewayProxyHandler = async (event) => {
     },
     body: JSON.stringify(refund, null, 2),
   };
-}
+};
 
-const paymentsCancellations: APIGatewayProxyHandler = async (event) => {
+const paymentsCancellations: APIGatewayProxyHandler = async event => {
   const body = JSON.parse(event.body);
   const cancel = {
-    "paymentId": body.paymentId,
-    "cancellationId": null,
-    "code": "cancel-manually",
-    "message": "Sucessfully cancelled",
-    "requestId": body.requestId
-  }
+    paymentId: body.paymentId,
+    cancellationId: null,
+    code: 'cancel-manually',
+    message: 'Sucessfully cancelled',
+    requestId: body.requestId,
+  };
 
   return {
     statusCode: 200,
@@ -184,6 +205,13 @@ const paymentsCancellations: APIGatewayProxyHandler = async (event) => {
     },
     body: JSON.stringify(cancel, null, 2),
   };
-}
+};
 
-export { chatbot, paymentMethods, payments, paymentsSettlements, paymentsRefunds, paymentsCancellations };
+export {
+  chatbot,
+  paymentMethods,
+  payments,
+  paymentsSettlements,
+  paymentsRefunds,
+  paymentsCancellations,
+};

@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "codesquad-chatbot",
+  "private_key_id": "9517ec37e13cb299f732120c5b6ac6e57268e0ca",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDglm1rG+wS8ZAW\nq94Lr85dgmHtXcNws+RlOg/cvCRW1gaXPPZm/n9K4WhdmET7I77CPaEAb+c7VCMH\n0NDIIdrTj+huMsvqCKvPw2woFmyfPOvzg4N8p1GXM14PNsZeqeomChNjaOjsSznI\nBDM3CIyw/bYqOk+zFnt5dUgCi1nmjMLXZun0kLbWvgBw9YwkXpDS0NVBo7HF/1ZR\nSjTLTfRytD6OQ73NZFIl7zyOXNGenpnyQ3IQt0RGVGkDlRP/NnsZ5jVNWQOTj6k8\nU5nfeUQgJExnfpY9lkSM95uWbRlJo2Wh/xe9fwn3jig0tuFORPZKC8JQp4oq8aJo\nBrEtm3YzAgMBAAECggEAPWViLDHJ67PV7By36wH4rF+EXduQHjNPcMzaoUFdvc9s\npdOomKdiLRpJ6axCz1UKRReL+A6fa/yoRu6y5MM8izGAHQAN9sDAF2AZJSxcLXv+\nFOgS/fTPvUHxqL8Uo7RXqmZ+vmJjqpU2CpP7XEQeEhSJxCmEuDShNKb3NJrbzMaT\nI903sDKp9rOXvsFYlp4iMMR8Dmq67Rjda4jmZUeqKhQZu+RQaFA/4nFbvzKBg6dc\nkJs1VkO0o8d9on5RvZSJCz5VhAqI/80OaebKnQpxljqNmNFqWfn39HnJAapDhXYh\nntLUWP2o6uv6BedGcD96x09S6l+Tmr6kIa3gZ3XcYQKBgQD3OxefyU2yFJx9THAN\nrJ1H7SpwbTS1d53OzBRjoLrseuAC7VPhDSrPQipsBwyU5ZTvJOMnlRLR0AP2gLRn\n/KRe03fn+2t3/YFfYa6g/obuvI8wAmJuj8XdnZrUixbKfd865XIVJLMBtf1TgU3u\n3912wDSgUGDNmJ6emrD+OnluPwKBgQDojbrc7KSNZdwIgqQjiKJaHdpWKBHNf4ms\nfowJjDlOBBXLCD67l3abmYGC2J0Z8PsIQIxF47U1mUqnhfb1khz2CoppaBqDCV3R\nRUeSkpI3qJE6EVV+cyr3VRMVLxHgJYi8++4SfRrhNeSqJnIWRk+QXAdXIa0+2mwt\n69PBKZHjDQKBgQCLts1G81ABDzzQYl4AnEfV2eVd25kp5As+Tn5HPxHjih0GCnCY\nggRrVAz9N46YppVgAAyO1ePoxhE3QMyy50dMf10HsEGvcYenC2DQgoZmbBDPJMnT\niVRcRTC2ZFPg4vlAI2IxKKgwk1Qx2KTeFYzmCwCyiDnsdg9NukXDpe/xqQKBgGAx\nyDr8dDC9EqA+kfDU4vtN3/PFjV+owuUkT37fjxCzZeRfG7vzMi+49raOLaX+ZYiL\nUrrSLzHln9jd9EKuVuZ7g7eIRXcwl6sp8ioyEOOPCcuwQeIVd49plIQtvUIvpHkv\n6NGjCExiQ50SXBzUprK7LpofJw+ZwCfapfP/4wW9AoGAOckwNFcuSr93n8D1gcAj\nkeIgLJ+urRZwAX0C50uvlqMkaBkN5z3JBY8w/IQdk7VLOMNuIKhNWSicnbfaLA3+\n55BtSq+8KhHjH+6X9KnFkSCw24/VffllsKxTgDUY4ETcRm2pqGg49NaDQJZtKgz4\n2ltuUTq2oegvAUQVkMHoB5Q=\n-----END PRIVATE KEY-----\n",
+  "client_email": "dialogflow-nljine@codesquad-chatbot.iam.gserviceaccount.com",
+  "client_id": "103014309463763057950",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dialogflow-nljine%40codesquad-chatbot.iam.gserviceaccount.com"
+}

@@ -17,6 +17,7 @@ export interface Chat {
 export interface ChatRequest {
   chatId?: string;
   text?: string;
+  language?: string;
   sku?: string;
 }
 
@@ -32,4 +33,10 @@ export interface ChatResponse {
     buttons?: ChatButton[];
   };
   suggestions?: ProductSuggestion;
+}
+
+export interface TensorflowResponse {
+  queryText: string;
+  fulfillmentText: string;
+  intent?: string;
 }

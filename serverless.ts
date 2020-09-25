@@ -41,6 +41,8 @@ const serverlessConfiguration: Serverless = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       DYNAMODB_CHATS_TABLE: 'chabot-api-dev-chats',
       DYNAMODB_PRODUCT_SUGGESTIONS_TABLE: 'chabot-api-dev-product-suggestions',
+      GOOGLE_APPLICATION_CREDENTIALS: `./src/config/codesquad-chatbot-google.json`,
+      GOOGLE_PROJECT_ID: 'codesquad-chatbot',
     },
     iamRoleStatements: [
       {
@@ -68,7 +70,7 @@ const serverlessConfiguration: Serverless = {
         },
       ],
     },
-    paymentMethods:{
+    paymentMethods: {
       handler: 'src/handler.paymentMethods',
       events: [
         {
@@ -80,7 +82,7 @@ const serverlessConfiguration: Serverless = {
         },
       ],
     },
-    payments:{
+    payments: {
       handler: 'src/handler.payments',
       events: [
         {
@@ -92,7 +94,7 @@ const serverlessConfiguration: Serverless = {
         },
       ],
     },
-    paymentsSettlements:{
+    paymentsSettlements: {
       handler: 'src/handler.paymentsSettlements',
       events: [
         {
@@ -104,7 +106,7 @@ const serverlessConfiguration: Serverless = {
         },
       ],
     },
-    paymentsRefunds:{
+    paymentsRefunds: {
       handler: 'src/handler.paymentsRefunds',
       events: [
         {
@@ -116,7 +118,7 @@ const serverlessConfiguration: Serverless = {
         },
       ],
     },
-    paymentsCancellations:{
+    paymentsCancellations: {
       handler: 'src/handler.paymentsCancellations',
       events: [
         {
@@ -129,7 +131,7 @@ const serverlessConfiguration: Serverless = {
       ],
     },
   },
- /*  resources: {
+  /*  resources: {
     Resources: {
       ChatsDynamoDbTable: {
         Type: 'AWS::DynamoDB::Table',

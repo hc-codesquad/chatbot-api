@@ -1,7 +1,7 @@
-import shortid from 'shortid';
-import { getItem } from './resources/db/getItem'
+import { getItem } from './resources/db/getItem';
 import { putItem } from './resources/db/putItem';
 import { Chat } from './types/chat';
+const uuid = require('uuid');
 
 export async function getChatById(chatId: string): Promise<Chat> {
   const chat = await getItem({
@@ -22,5 +22,5 @@ export function putChat(chat: Chat): Promise<any> {
 }
 
 export function generateChatId() {
-  return shortid.generate();
+  return uuid.v4();
 }
