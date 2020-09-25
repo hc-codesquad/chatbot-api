@@ -34,9 +34,3 @@ export interface ChatResponse {
   };
   suggestions?: ProductSuggestion;
 }
-
-export interface TensorflowResponse {
-  queryText: string;
-  fulfillmentText: string;
-  intent?: string;
-}

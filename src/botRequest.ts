@@ -1,12 +1,15 @@
-import shortid from 'shortid';
 import { generateChatId } from './chatUtils';
 import { ChatRequest, ChatResponse } from './types/chat';
 
-export function parseBotRequest(body: { text?: string, chatId?: string, sku?: string }): ChatRequest {
+export function parseBotRequest(body: {
+  text?: string;
+  chatId?: string;
+  sku?: string;
+}): ChatRequest {
   return {
     text: body?.text || '',
-    chatId: body?.chatId || shortid.generate(),
-    sku: body?.sku || ''
+    chatId: body?.chatId || generateChatId(),
+    sku: body?.sku || '',
   };
 }
 
@@ -19,11 +22,12 @@ export function sendDefaultMessage(): ChatResponse {
   };
 }
 
-export function sendDefaultErrorMessage( chatId?:string): ChatResponse {
+export function sendDefaultErrorMessage(chatId?: string): ChatResponse {
   return {
-    chatId:chatId,
+    chatId: chatId,
     message: {
-      text: 'Desculpa, não entendi o que você falou, poderia tentar de outra forma?',
+      text:
+        'Desculpa, não entendi o que você falou, poderia tentar de outra forma?',
     },
   };
 }

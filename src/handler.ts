@@ -21,14 +21,13 @@ import { generateChatId, getChatById, putChat } from './chatUtils';
 import { parseUserMessage } from './parseUserMessage';
 import { Chat, ChatRequest, ChatResponse } from './types/chat';
 import { Payment } from './types/payment';
-import { getIntent } from './tensorflow';
+import { getIntent } from './dialogflow';
 
 const chatbot: APIGatewayProxyHandler = async event => {
   let response: ChatResponse;
   let chatId: string;
   let text: string;
   let language: string;
-  let responseTensorFlow: any;
 
   try {
     const body = JSON.parse(event.body);
@@ -37,7 +36,8 @@ const chatbot: APIGatewayProxyHandler = async event => {
 
     chatId = chatRequest?.chatId;
     text = chatRequest?.text;
-    text = chatRequest?.language;
+    language = chatRequest?.language;
+
     console.log('ChatID: ', chatId, 'text: ', text);
   } catch (e) {
     console.error('Error when parsing bot request', e);
@@ -60,23 +60,31 @@ const chatbot: APIGatewayProxyHandler = async event => {
     if (!text) {
       response = sendDefaultMessage();
     } else {
-      const parse = await parseUserMessage(text, chat);
+      const responses = await getIntent(chatId, text, language);
+      const result = responses[0].queryResult;
+      response = {
+        chatId,
+        message: {
+          text: result.fulfillmentText,
+        },
+      };
+      // const parse = await parseUserMessage(text, chat);
 
-      console.log('parseUserMessage', parse);
+      // console.log('parseUserMessage', parse);
 
-      if (parse) {
-        await putChat(chat);
+      // if (parse) {
+      //   await putChat(chat);
 
-        response = parse.response;
-      } else {
-        response = {
-          chatId,
-          message: {
-            text:
-              'Ok, vou procurar aqui as melhores sugestões para você, só um minuto',
-          },
-        };
-      }
+      //   response = parse.response;
+      // } else {
+      //   response = {
+      //     chatId,
+      //     message: {
+      //       text:
+      //         'Ok, vou procurar aqui as melhores sugestões para você, só um minuto',
+      //     },
+      //   };
+      // }
     }
   } catch (e) {
     console.error('Bot error', e);
